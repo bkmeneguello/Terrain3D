@@ -9,6 +9,9 @@
 
 #include "logger.h"
 #include "terrain_3d_data.h"
+#ifdef HAVE_LIBTIFF
+#include "terrain_3d_tiff.h"
+#endif
 
 ///////////////////////////
 // Private Functions
@@ -1055,6 +1058,10 @@ Error Terrain3DData::export_image(const String &p_file_name, const MapType p_map
 			}
 		}
 		return file->get_error();
+#ifdef HAVE_LIBTIFF
+	} else if ((ext == "tif") || (ext == "tiff")) {
+		return TiffIO::save_to_file(file_name, img);
+#endif
 	} else if (ext == "exr") {
 		return img->save_exr(file_name, (p_map_type == TYPE_HEIGHT) ? true : false);
 	} else if (ext == "png") {
@@ -1065,7 +1072,7 @@ Error Terrain3DData::export_image(const String &p_file_name, const MapType p_map
 		return img->save_webp(file_name);
 	} else if ((ext == "res") || (ext == "tres")) {
 		return ResourceSaver::get_singleton()->save(img, file_name, ResourceSaver::FLAG_COMPRESS);
-	}
+    }
 
 	LOG(ERROR, "No recognized file type. See docs for valid extensions");
 	return FAILED;

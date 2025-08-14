@@ -35,7 +35,7 @@ public: // Constants
 	};
 
 	static inline const Color COLOR[] = {
-		COLOR_BLACK, // TYPE_HEIGHT
+		COLOR_NAN, // TYPE_HEIGHT
 		COLOR_CONTROL, // TYPE_CONTROL
 		COLOR_ROUGHNESS, // TYPE_COLOR
 		COLOR_NAN, // TYPE_MAX, unused just in case someone indexes the array

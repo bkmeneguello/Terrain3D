@@ -7,6 +7,9 @@
 
 #include "logger.h"
 #include "terrain_3d_util.h"
+#ifdef HAVE_LIBTIFF
+#include "terrain_3d_tiff.h"
+#endif
 
 ///////////////////////////
 // Public Functions
@@ -344,7 +347,11 @@ Ref<Image> Terrain3DUtil::load_image(const String &p_file_name, const int p_cach
 				img->set_pixel(x, y, Color(h, 0.f, 0.f));
 			}
 		}
-
+#ifdef HAVE_LIBTIFF
+	} else if (ext == "tif" || ext == "tiff") {
+		LOG(DEBUG, "Loading file as TIFF");
+		img = TiffIO::load_from_file(p_file_name);
+#endif
 		// If an Image extension, use Image loader
 	} else if (imgloader_extensions.has(ext)) {
 		LOG(DEBUG, "ImageFormatLoader loading recognized file type: ", ext);

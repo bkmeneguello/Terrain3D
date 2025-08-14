@@ -3,12 +3,18 @@ from glob import glob
 from pathlib import Path
 import os
 
+AddOption("--with-tiff", dest="with_tiff", action="store_true", default=False,
+          help="Enable optional libtiff (TIFF textures) support if available")
+
 # TODO: Do not copy environment after godot-cpp/test is updated <https://github.com/godotengine/godot-cpp/blob/master/test/SConstruct>.
 env = SConscript("godot-cpp/SConstruct")
 
 # Add source files.
 env.Append(CPPPATH=["src/"])
 sources = Glob("src/*.cpp")
+
+if GetOption("with_tiff"):
+    SConscript('libtiff.py', exports=['env'])
 
 # Find gdextension path even if the directory or extension is renamed (e.g. project/addons/example/example.gdextension).
 (extension_path,) = glob("project/addons/terrain_3d/*.gdextension")
